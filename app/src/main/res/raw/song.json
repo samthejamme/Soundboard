@@ -1,170 +1,110 @@
 [
   {
-    "duration": 500,
-    "note": "LG"
-  },
-  {
-    "duration": 500,
-    "note": "LG"
-  },
-  {
-    "duration": 500,
-    "note": "D"
-  },
-  {
-    "duration": 500,
-    "note": "D"
-  },
-  {
-    "duration": 500,
-    "note": "E"
-  },
-  {
-    "duration": 500,
-    "note": "E"
-  },
-  {
     "duration": 1000,
-    "note": "D"
+    "note": "G"
   },
   {
-    "duration": 500,
-    "note": "C"
-  },
-  {
-    "duration": 500,
-    "note": "C"
-  },
-  {
-    "duration": 500,
+    "duration": 100,
     "note": "B"
   },
   {
-    "duration": 500,
-    "note": "B"
-  },
-  {
-    "duration": 500,
+    "duration": 300,
     "note": "A"
   },
   {
-    "duration": 500,
+    "duration": 300,
+    "note": "G"
+  },
+  {
+    "duration": 300,
     "note": "A"
   },
   {
-    "duration": 1000,
-    "note": "LG"
-  },
-  {
-    "duration": 500,
-    "note": "D"
-  },
-  {
-    "duration": 500,
-    "note": "D"
-  },
-  {
-    "duration": 500,
-    "note": "C"
-  },
-  {
-    "duration": 500,
-    "note": "C"
-  },
-  {
-    "duration": 500,
+    "duration": 300,
     "note": "B"
   },
   {
-    "duration": 500,
+    "duration": 600,
+    "note": "G"
+  },
+  {
+    "duration": 300,
+    "note": "HG"
+  },
+  {
+    "duration": 300,
+    "note": "HD"
+  },
+  {
+    "duration": 300,
+    "note": "HD"
+  },
+  {
+    "duration": 300,
     "note": "B"
   },
   {
+    "duration": 300,
+    "note": "B"
+  },
+  {
+    "duration": 300,
+    "note": "G"
+  },
+  {
     "duration": 1000,
+    "note": "HC"
+  },
+  {
+    "duration": 100,
+    "note": "HC"
+  },
+  {
+    "duration": 300,
+    "note": "B"
+  },
+  {
+    "duration": 300,
     "note": "A"
   },
   {
-    "duration": 500,
-    "note": "D"
-  },
-  {
-    "duration": 500,
-    "note": "D"
-  },
-  {
-    "duration": 500,
-    "note": "C"
-  },
-  {
-    "duration": 500,
-    "note": "C"
-  },
-  {
-    "duration": 500,
+    "duration": 300,
     "note": "B"
   },
   {
-    "duration": 500,
-    "note": "B"
+    "duration": 300,
+    "note": "HC"
   },
   {
-    "duration": 1000,
+    "duration": 600,
     "note": "A"
   },
   {
-    "duration": 500,
-    "note": "LG"
+    "duration": 300,
+    "note": "HD"
   },
   {
-    "duration": 500,
-    "note": "LG"
+    "duration": 300,
+    "note": "HE"
   },
   {
-    "duration": 500,
-    "note": "D"
+    "duration": 300,
+    "note": "HD"
   },
   {
-    "duration": 500,
-    "note": "D"
-  },
-  {
-    "duration": 500,
-    "note": "E"
-  },
-  {
-    "duration": 500,
-    "note": "E"
-  },
-  {
-    "duration": 1000,
-    "note": "D"
-  },
-  {
-    "duration": 500,
-    "note": "C"
-  },
-  {
-    "duration": 500,
-    "note": "C"
-  },
-  {
-    "duration": 500,
+    "duration": 300,
     "note": "B"
   },
   {
-    "duration": 500,
-    "note": "B"
+    "duration": 300,
+    "note": "HC"
   },
   {
-    "duration": 500,
+    "duration": 300,
     "note": "A"
   },
   {
-    "duration": 500,
-    "note": "A"
-  },
-  {
-    "duration": 1000,
-    "note": "LG"
+    "duration": 300,
+    "note": "G"
   }
 ]

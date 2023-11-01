@@ -4,15 +4,22 @@ import android.media.AudioManager
 import android.media.SoundPool
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Button
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.mistershorr.soundboard.databinding.ActivityMainBinding
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
     val TAG = "MainActivity"
     private lateinit var binding: ActivityMainBinding
-    lateinit var soundPool : SoundPool
+    private lateinit var soundPool : SoundPool
+    private lateinit var listOfNotes : List<Note>
     var aNote = 0; var hANote = 0
     var bNote = 0; var bbNote = 0
     var hBNote = 0; var hBbNote = 0
@@ -35,10 +42,11 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(R.layout.activity_main)
+        setContentView(binding.root)
 
         initializeSoundPool()
         setListeners()
+        loadSong()
     }
 
     private fun setListeners() {
@@ -55,6 +63,7 @@ class MainActivity : AppCompatActivity() {
         binding.buttonMainFSharp.setOnClickListener(soundBoardListener)
         binding.buttonMainG.setOnClickListener(soundBoardListener)
         binding.buttonMainGSharp.setOnClickListener(soundBoardListener)
+        binding.buttonMainPlaySong.setOnClickListener(soundBoardListener)
     }
 
     private fun initializeSoundPool() {
@@ -65,59 +74,62 @@ class MainActivity : AppCompatActivity() {
 //           // isSoundPoolLoaded = true
 //        })
         aNote = soundPool.load(this, R.raw.scalea, 1)
-        // Maps use key-value pairs (just like the Bundle)
-        noteMap["A"] = aNote
         hANote = soundPool.load(this, R.raw.scalehigha, 1)
-        noteMap["HA"] = hANote
         bbNote = soundPool.load(this, R.raw.scalebb, 1)
-        noteMap["Bb"] = bbNote
         hBbNote = soundPool.load(this, R.raw.scalehighbb, 1)
-        noteMap["HBb"] = hBbNote
         bNote = soundPool.load(this, R.raw.scaleb, 1)
-        // kotlin lets you use array-like assignments
-        noteMap["B"] = bNote
         hBNote = soundPool.load(this, R.raw.scalehighb, 1)
-        noteMap["HB"] = hBNote
-        cNote =  soundPool.load(this, R.raw.scalec, 1)
-        noteMap["C"] = cNote
+        cNote = soundPool.load(this, R.raw.scalec, 1)
         hCNote = soundPool.load(this, R.raw.scalehighc, 1)
-        noteMap["HC"] = hCNote
         csNote = soundPool.load(this, R.raw.scalecs, 1)
-        noteMap["C#"] = csNote
         hCsNote = soundPool.load(this, R.raw.scalehighcs, 1)
-        noteMap["HC#"] = hCsNote
-        dNote =  soundPool.load(this, R.raw.scaled, 1)
-        noteMap["D"] = dNote
+        dNote = soundPool.load(this, R.raw.scaled, 1)
         hDNote = soundPool.load(this, R.raw.scalehighd, 1)
-        noteMap["HD"] = hDNote
-        dsNote =  soundPool.load(this, R.raw.scaleds, 1)
-        noteMap["D#"] = dsNote
+        dsNote = soundPool.load(this, R.raw.scaleds, 1)
         hDsNote = soundPool.load(this, R.raw.scalehighds, 1)
-        noteMap["HD#"] = hDsNote
         eNote = soundPool.load(this, R.raw.scalee, 1)
-        noteMap["E"] = eNote
         hENote = soundPool.load(this, R.raw.scalehighe, 1)
-        noteMap["HE"] = hENote
         fNote = soundPool.load(this, R.raw.scalef, 1)
-        noteMap["F"] = fNote
         hFNote = soundPool.load(this, R.raw.scalehighf, 1)
-        noteMap["HF"] = hFNote
         fsNote = soundPool.load(this, R.raw.scalefs, 1)
-        noteMap["F#"] = fsNote
         hFsNote = soundPool.load(this, R.raw.scalehighfs, 1)
-        noteMap["HF#"] = hFsNote
-        gNote =  soundPool.load(this, R.raw.scaleg, 1)
-        noteMap["G"] = gNote
+        gNote = soundPool.load(this, R.raw.scaleg, 1)
         hGNote = soundPool.load(this, R.raw.scalehighg, 1)
-        noteMap["HG"] = hGNote
         lGNote = soundPool.load(this, R.raw.scalelowg, 1)
-        noteMap["LG"] = lGNote
-        gsNote =  soundPool.load(this, R.raw.scalegs, 1)
-        noteMap["G#"] = gsNote
+        gsNote = soundPool.load(this, R.raw.scalegs, 1)
         hGsNote = soundPool.load(this, R.raw.scalehighgs, 1)
+        noteMap["A"] = aNote
+        noteMap["HA"] = hANote
+        noteMap["Bb"] = bbNote
+        noteMap["HBb"] = hBbNote
+        noteMap["B"] = bNote
+        noteMap["HB"] = hBNote
+        noteMap["C"] = cNote
+        noteMap["HC"] = hCNote
+        noteMap["C#"] = csNote
+        noteMap["HC#"] = hCsNote
+        noteMap["D"] = dNote
+        noteMap["HD"] = hDNote
+        noteMap["D#"] = dsNote
+        noteMap["HD#"] = hDsNote
+        noteMap["E"] = eNote
+        noteMap["HE"] = hENote
+        noteMap["F"] = fNote
+        noteMap["HF"] = hFNote
+        noteMap["F#"] = fsNote
+        noteMap["HF#"] = hFsNote
+        noteMap["G"] = gNote
+        noteMap["HG"] = hGNote
+        noteMap["LG"] = lGNote
+        noteMap["G#"] = gsNote
         noteMap["HG#"] = hGsNote
     }
 
+    private fun playNote(note: String) {
+        // ?: is the elvis operator. it lets you provide a default value
+        // if the value is null
+        playNote(noteMap[note] ?: 0)
+    }
     private fun playNote(noteId : Int) {
         soundPool.play(noteId, 1f, 1f, 1, 0, 1f)
     }
@@ -131,59 +143,49 @@ class MainActivity : AppCompatActivity() {
                 R.id.button_main_d -> playNote(dNote); R.id.button_main_d_sharp -> playNote(dsNote)
                 R.id.button_main_f -> playNote(fNote); R.id.button_main_f_sharp -> playNote(fsNote)
                 R.id.button_main_g -> playNote(gNote); R.id.button_main_g_sharp -> playNote(gsNote)
+                R.id.button_main_playSong -> GlobalScope.launch {
+                    playSong(listOfNotes)
+                }
+
             }
         }
     }
 
-    private fun playNote(note: String) {
-        // ?: is the elvis operator. it lets you provide a default value
-        // if the value is null
-        playNote(noteMap[note] ?: 0)
-    }
-
-    private fun playSong(song: List<Note>) {
-        // loop through a list of notes
-        var int = 0
-        while(int <= song.lastIndex) {
-            // play the note
-            // note you get is a string
-            // to play the note, you need the corresponding soundPool object
-            when(song.get(int).note){
-                "A" -> playNote(aNote)
-                "Bb" -> playNote(bbNote)
-                "B" -> playNote(bNote)
-                "C" -> playNote(cNote)
-                "C#" -> playNote(csNote)
-                "D" -> playNote(dNote)
-                "D#" -> playNote(dsNote)
-                "E" -> playNote(eNote)
-                "F" -> playNote(fNote)
-                "F#" -> playNote(fsNote)
-                "G" -> playNote(gNote)
-                "G#" -> playNote(gsNote)
-                "LG" -> playNote(lGNote)
-                "HG" -> playNote(lGNote)
-                "HA" -> playNote(lGNote)
-                "HB" -> playNote(lGNote)
-                "Hb" -> playNote(lGNote)
-                "HBb" -> playNote(lGNote)
-                "HC#" -> playNote(lGNote)
-                "HD" -> playNote(lGNote)
-                "HD#" -> playNote(lGNote)
-                "HE" -> playNote(lGNote)
-                "HF" -> playNote(lGNote)
-                "HF#" -> playNote(lGNote)
-                "HGb" -> playNote(lGNote)
-            }
-            int++
+    private fun loadSong() {
+        val inputStream = resources.openRawResource(R.raw.bachtwopartinventioninfmajor)
+        val jsonString = inputStream.bufferedReader().use {
+            it.readText()
         }
+
+        // parse json quesitons
+        val gson = Gson()
+        val sType = object: TypeToken<List<Note>>() {}.type
+        val notes = gson.fromJson<List<Note>>(jsonString, sType)
+        listOfNotes = notes
     }
 
     private fun delay(time: Long) {
-        try{
+        try {
             Thread.sleep(time)
-        } catch(e: InterruptedException) {
+        } catch (e: InterruptedException) {
             e.printStackTrace()
+        }
+    }
+
+    private suspend fun playSong(notes : List<Note>) {
+        GlobalScope.launch(Dispatchers.Main) {
+            binding.groupMainNoteButtons.referencedIds.forEach {
+                findViewById<Button>(it).isEnabled = false
+            }
+        }
+        for(note in notes) {
+            playNote(noteMap[note.note] ?: 0)
+            delay(note.duration)
+        }
+        GlobalScope.launch(Dispatchers.Main) {
+            binding.groupMainNoteButtons.referencedIds.forEach {
+                findViewById<Button>(it).isEnabled = true
+            }
         }
     }
 }
